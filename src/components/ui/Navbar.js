@@ -41,6 +41,16 @@ export const Navbar = () => {
                         activeClassName="active"
                         className="nav-item nav-link" 
                         exact
+                        to="/search"
+                    >
+                        Search
+                    </NavLink>
+                </ul>
+                <ul className="navbar-nav ml-auto">
+                    <NavLink 
+                        activeClassName="active"
+                        className="nav-item nav-link" 
+                        exact
                         to="/login"
                     >
                         Logout
