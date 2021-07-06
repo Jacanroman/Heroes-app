@@ -1,9 +1,10 @@
-import React from 'react'
+import React, {useMemo} from 'react'
 import queryString from 'query-string';
 import { useLocation } from 'react-router-dom';
 import { heroes } from '../../data/heroes';
 import { HeroCard } from '../heroes/HeroCard';
 import { useForm } from '../hooks/useForm';
+import { getHeroesByName } from '../../selectors/getHeroesByName';
 
 
 export const SearchScreen = ({history}) => {
@@ -22,8 +23,6 @@ export const SearchScreen = ({history}) => {
     console.log(q)
 
     
-    const heroFiletred = heroes;
-    
     const initialForm ={
         searchText: q
     };
@@ -32,6 +31,17 @@ export const SearchScreen = ({history}) => {
 
     //desestructuracion
     const {searchText} = values;
+
+
+    //estos son los heroes sin filtro
+    //const heroFiletred = heroes;
+
+    //estos son los heroes con filtro del nombre en el buscador
+    //const heroFiletred = getHeroesByName(searchText)
+
+    //igual que lo anterior pero con memo pero le pasamos el query en vez
+    //del searchText
+    const heroFiletred = useMemo(() => getHeroesByName(q), [q]);
     
     const handleSearch = (e) =>{
         e.preventDefault();
@@ -72,6 +82,16 @@ export const SearchScreen = ({history}) => {
 
                     <h4>Results</h4>
                     <hr />
+
+                    { (q==='') && <div className="alert alert-info">
+                        Search a Hero
+                        </div>
+                    }
+
+                    { (q!=='' && heroFiletred.length===0) && <div className="alert alert-danger">
+                        There is no hero with the name {q}
+                        </div>
+                    }
 
                     {
                         heroFiletred.map(hero =>(
